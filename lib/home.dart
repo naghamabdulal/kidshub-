@@ -14,7 +14,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
 
   Actiivity current=acts[0];
-
+String unit="ml";
   double totalWater = double.parse(acts[0].getWater());
   double x=0 ,r=0;
   void updateweight(kg){
@@ -24,13 +24,17 @@ class _HomeState extends State<Home> {
 
   }
 
-  void Updateresult(){
+  void Updateresult() {
     setState(() {
-      if(x==0 ){
-        r=0;
+      if (x == 0) {
+        r = 0;
       }
-      else{ r= totalWater + (x *35);}
-
+       if (x != 0 && unit == 'mL') {
+        r = totalWater + (x * 35);
+      }
+      else if (x != 0 && unit == 'L') {
+        r = (totalWater + (x * 35)) / 1000;
+      }
     });
   }
 
@@ -76,13 +80,46 @@ class _HomeState extends State<Home> {
 
        ),
         SizedBox(height: 20),
-        ElevatedButton(onPressed:(){Updateresult();}, child: Text("Water need  ",
-          style: TextStyle(fontSize: 15 ,fontWeight:FontWeight.bold,
-            color:Colors.green),
+
+
+
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Unit: '),
+            Radio<String>(
+              value: 'mL',
+              groupValue: unit,
+              onChanged: (value) {
+                setState(() {
+                  unit = value!;
+                });
+              },
+            ),
+            Text('milliter'),
+            Radio<String>(
+              value: 'L',
+              groupValue: unit,
+              onChanged: (value) {
+                setState(() {
+                  unit = value!;
+                });
+              },
+            ),
+            Text('Liter'),
+          ],
         ),
-        ),
+          SizedBox(height: 20,),
+        SizedBox(width:160,
+        child:    ElevatedButton(onPressed:(){Updateresult();  }, child:
+        Icon(Icons.water_drop,  size: 30),
+
+        ),),
+
+
         SizedBox(height: 13),
-        Text('the child need drink $r ml',style: TextStyle(fontSize: 20 ,fontWeight:FontWeight.bold,
+        Text('the child need drink $r $unit',style: TextStyle(fontSize: 20 ,fontWeight:FontWeight.bold,
             color:Colors.teal),
         ),
 
